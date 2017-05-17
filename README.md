@@ -19,7 +19,7 @@ sudo ./f5fpc-client.py
 
 ```
 docker run \
-	--privileged \
+    --privileged \
     --name f5fpc \
     matthiaslohr/f5fpc
 ```
