@@ -2,13 +2,23 @@
 
 F5FPC=/usr/local/bin/f5fpc
 
-
-
-command="$F5FPC -s -x"
-
-if [ -n "$HOST" ] ; then
-	command="$command -t $HOST"
+if [ -z "$HOST" ] ; then
+	echo -n "Please enter VPN host name: "
+	read HOST
 fi
+
+if [ ! -f "$F5FPC" ] ; then
+	echo "Downloading and installing VPN client..."
+	cwd=$(pwd)
+	mkdir -p /root/f5fpc
+	cd /root/f5fpc
+	wget --no-check-certificate https://$HOST/public/download/linux_sslvpn.tgz
+	tar xfz linux_sslvpn.tgz
+	yes "yes" | ./Install.sh
+	rm -rf /root/f5fpc
+fi
+
+command="$F5FPC -s -x -t $HOST"
 
 if [ -n "$USER" ] ; then
 	command="$command -u $USER"
