@@ -1,38 +1,27 @@
 
 # F5 VPN client
 
-*inspired by https://github.com/brk3/docker-f5fpc*
-
 ## General setup
 
 * Install Docker. **Important:** Do **not** use the packages provided by your
   distribution packages sources.
   Use the officical resources from docker: https://docs.docker.com/engine/installation/.
+* Install docker-py:
+  ```
+  pip install docker
+  ```
 
-## Run as router
+## Start F5 VPN client
 
+There's a wrapper script (```f5fpy-client.py```) which helps to set up
+the docker container, the VPN connection and the desired network routes.
+
+Simple run:
 ```
-sudo ./f5fpc-client.py
-```
-
-## Run image in standalone mode from Dockerhub
-
-```
-docker run \
-    --privileged \
-    --name f5fpc \
-    matthiaslohr/f5fpc
-```
-
-
-### Useful commands
-
-* Show VPN status
-```
-docker exec f5fpc f5fpc -i
+./f5fpc-client.py <VPN_HOST> <USER>
 ```
 
-* Show VPN resolv.conf
+For more information and options see
 ```
-docker exec f5fpc cat /etc/resolv.conf.fp-tmp
+./f5fpc-client.py -h
 ```
