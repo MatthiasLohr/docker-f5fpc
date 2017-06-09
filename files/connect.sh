@@ -28,7 +28,7 @@ if [ -n "$HEXPASSWORD" ] ; then
 	command="$command -P $HEXPASSWORD"
 fi
 
-$command
+nohup $command
 
 sysctl -w net.ipv4.ip_forward=1 > /dev/null
 iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
