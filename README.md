@@ -1,7 +1,7 @@
 
 # F5 VPN client
 
-## General setup
+## Setup
 
 * Install Docker. **Important:** Do **not** use the packages provided by your
   distribution packages sources.
