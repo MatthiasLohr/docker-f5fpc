@@ -25,7 +25,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('host', help='VPN host')
     parser.add_argument('user', help='VPN user name')
-    parser.add_argument('-n', '--network', nargs='*', dest='networks')
+    parser.add_argument('-n', '--network', nargs='*', dest='networks', help='Networks available via VPN in CIDR notation'
+                                                                            ' (e.g. 10.0.0.0/8). Will try to set routes'
+                                                                            ' (requires root privileges).')
     parser.add_argument('--debug', action='store_true')
     args = parser.parse_args()
 
