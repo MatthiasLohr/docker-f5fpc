@@ -4,6 +4,7 @@ import argparse
 import docker
 import getpass
 import logging
+import shlex
 import signal
 import subprocess
 import sys
@@ -54,7 +55,6 @@ def main():
 
     logger.info('Connecting to VPN...')
     container_exec(container_name, '/root/connect.sh')
-    print('done')
     while True:
         status = container_exec(container_name, '/usr/local/bin/f5fpc -i')
         print(status)
@@ -65,9 +65,10 @@ def get_container_name(host):
 
 
 def container_exec(container, command):
-    return_code = subprocess.call('/usr/bin/docker exec -it {container} {command}'.format(
-        container=container, command=command), shell=True
-    )
+    command_string = '/usr/bin/docker exec -it {container} {command}'.format(container=container, command=command)
+    command_splitted = shlex.split(command_string)
+    logger.debug(command_splitted)
+    return_code = subprocess.call(command_splitted)
     return return_code
 
 

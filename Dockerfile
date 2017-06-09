@@ -1,5 +1,5 @@
 
-FROM alpine:latest
+FROM alpine:3.5
 
 RUN apk add --no-cache bash file iptables libc6-compat libgcc libstdc++ wget
 
