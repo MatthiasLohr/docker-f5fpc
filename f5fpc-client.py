@@ -4,6 +4,7 @@ import argparse
 import docker
 import getpass
 import logging
+import os
 import shlex
 import signal
 import subprocess
@@ -24,15 +25,18 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('host', help='VPN host')
     parser.add_argument('user', help='VPN user name')
-    parser.add_argument('-r', '--route', nargs='*')
+    parser.add_argument('-n', '--network', nargs='*', dest='networks')
     parser.add_argument('--debug', action='store_true')
     args = parser.parse_args()
 
     if args.debug:
         logger.setLevel(logging.DEBUG)
 
+    if os.getuid() <> 0 and args.networks and len(args.networks) > 0:
+        logging.warn('We need root privileges to set the network routes for you!')
+
     container_name = get_container_name(args.host)
-    password = str(getpass.getpass('Enter your password: '))
+    password = str(getpass.getpass('Enter your VPN password: '))
 
     # remove old container instance
     try:
@@ -79,17 +83,39 @@ def main():
             return 1
         last_status = status
 
-    # TODO set routes
+    inspection_result = docker.APIClient().inspect_container(container_name)
+    container_ip = inspection_result['NetworkSettings']['IPAddress']
+    logging.debug('Container IP: {ip}'.format(ip=container_ip))
+    if args.networks:
+        for network in args.networks:
+            rc, stdout, stderr = route_add(network, container_ip)
+            if rc == 0:
+                logging.debug('Route {net} via {gw} added'.format(net=network, gw=container_ip))
+            else:
+                logging.error('Could not add route {net} via {gw}: {reason}'.format(
+                    net=network, gw=container_ip, reason=stderr.strip())
+                )
+        if len(args.networks) > 0:
+            logging.info('Routes added')
 
     # wait for signal
     def shutdown(signal, frame):
         logging.info('Shutting down...')
-        # TODO remove routes
+        if args.networks:
+            for network in args.networks:
+                rc, stdout, stderr = route_del(network, container_ip)
+                if rc == 0:
+                    logging.debug('Route {net} via {gw} removed'.format(net=network, gw=container_ip))
+                else:
+                    logging.error('Could not delete route {net} via {gw}: {reason}'.format(
+                        net=network, gw=container_ip,reason=stderr.strip())
+                    )
         container.stop()
         container.remove()
         return 0
 
     signal.signal(signal.SIGINT, shutdown)
+    # TODO monitor connection state!
     signal.pause()
 
 
@@ -105,6 +131,22 @@ def container_exec(container, command):
     stdout, stderr = process.communicate()
     returncode = process.returncode
     return returncode, stdout, stderr
+
+
+def os_exec(command):
+    command_splitted = shlex.split(command)
+    process = subprocess.Popen(command_splitted, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+    returncode = process.returncode
+    return returncode, stdout, stderr
+
+
+def route_add(network, gateway):
+    return os_exec('route add -net {network} gw {gateway}'.format(network=network, gateway=gateway))
+
+
+def route_del(network, gateway):
+    return os_exec('route del -net {network} gw {gateway}'.format(network=network, gateway=gateway))
 
 
 if __name__ == '__main__':
