@@ -47,7 +47,7 @@ def main():
 
     container = docker_client.containers.run(
         'matthiaslohr/f5fpc',
-        '/root/idle.sh',
+        '/opt/idle.sh',
         privileged=True,
         name=container_name,
         detach=True,
@@ -59,7 +59,7 @@ def main():
     )
     logging.debug('Docker container initialized')
     logging.info('Connecting to {host}...'.format(host=args.host))
-    container_exec(container_name, '/root/connect.sh')
+    container_exec(container_name, '/opt/connect.sh')
 
     last_status = -255
     while True:

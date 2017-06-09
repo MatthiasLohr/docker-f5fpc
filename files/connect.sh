@@ -8,7 +8,7 @@ if [ -z "$HOST" ] ; then
 fi
 
 if [ ! -e "$F5FPC" ] ; then
-	HOST=$HOST /root/setup.sh
+	HOST=$HOST /opt/setup.sh
 	if [ "$?" != "0" ] ; then
 		exit 1
 	fi

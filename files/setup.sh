@@ -8,10 +8,10 @@ fi
 if [ ! -e "/usr/local/bin/f5fpc" ] ; then
 	echo "Downloading and installing VPN client..."
 	cwd=$(pwd)
-	mkdir -p /root/f5fpc
-	cd /root/f5fpc
+	mkdir -p /tmp/f5fpc
+	cd /tmp/f5fpc
 	wget --no-check-certificate "https://$HOST/public/download/linux_sslvpn.tgz"
 	tar xfz linux_sslvpn.tgz
 	yes "yes" | ./Install.sh
-	rm -rf /root/f5fpc
+	rm -rf /tmp/f5fpc
 fi

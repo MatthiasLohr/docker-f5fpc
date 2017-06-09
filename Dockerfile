@@ -13,6 +13,6 @@ RUN mkdir -p /tmp/f5fpc && \
     yes "yes" | ./Install.sh && \
     rm -rf /tmp/f5fpc
 
-ADD ./files/* /root/
+ADD ./files/* /opt/
 
-CMD /root/run.sh
+CMD /opt/run.sh

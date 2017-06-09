@@ -2,7 +2,7 @@
 
 F5FPC=/usr/local/bin/f5fpc
 
-/root/connect.sh
+/opt/connect.sh
 
 old_status=0
 while true ; do
