@@ -6,9 +6,9 @@
 * Install Docker. **Important:** Do **not** use the packages provided by your
   distribution packages sources.
   Use the officical resources from docker: https://docs.docker.com/engine/installation/.
-* Install docker-py:
+* Install required python packages:
   ```
-  pip install docker
+  pip install -r requirements.txt
   ```
 
 ## Start F5 VPN client
