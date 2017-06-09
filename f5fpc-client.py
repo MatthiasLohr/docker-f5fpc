@@ -63,18 +63,31 @@ def main():
 
     last_status = -255
     while True:
-        status = container_exec(container_name, '/usr/local/bin/f5fpc -i')
-
-        if status == 5 and last_status != 5:
-            logging.info('Connection established')
+        status, stdout, stderr = container_exec(container_name, '/usr/local/bin/f5fpc -i')
+        logging.debug('f5fpc --info returns {code}'.format(code=status))
+        if status == 1 and last_status != 1:
+            logging.info('Session initialized.')
+        elif status == 2 and last_status != 2:
+            logging.info('Logging in...')
+        elif status == 5:
+            logging.info('Connection established. Welcome to {host} network!'.format(host=args.host))
             break
+        elif status == 7:
+            logging.error('Login was denied.')
+            container.stop()
+            container.remove()
+            return 1
+        last_status = status
 
     # TODO set routes
 
     # wait for signal
     def shutdown(signal, frame):
+        logging.info('Shutting down...')
         # TODO remove routes
         container.stop()
+        container.remove()
+        return 0
 
     signal.signal(signal.SIGINT, shutdown)
     signal.pause()
@@ -88,8 +101,10 @@ def container_exec(container, command):
     command_string = '/usr/bin/docker exec -it {container} {command}'.format(container=container, command=command)
     command_splitted = shlex.split(command_string)
     logger.debug(command_splitted)
-    return_code = subprocess.call(command_splitted, stdout=None)
-    return return_code
+    process = subprocess.Popen(command_splitted, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
+    returncode = process.returncode
+    return returncode, stdout, stderr
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-trap 'exit 1' SIGINT
+trap 'exit' SIGINT SIGTERM
 
 while true ; do
 	sleep 1
