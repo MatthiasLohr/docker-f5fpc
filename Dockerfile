@@ -1,6 +1,8 @@
 
 FROM alpine:3.5
 
+LABEL maintainer="Matthias Lohr <matthias@lohr.me>"
+
 RUN apk add --no-cache bash ca-certificates file iptables libc6-compat libgcc libstdc++ wget
 
 RUN mkdir -p /lib64 && \
