@@ -144,11 +144,11 @@ def os_exec(command):
 
 
 def route_add(network, gateway):
-    return os_exec('route add -net {network} gw {gateway}'.format(network=network, gateway=gateway))
+    return os_exec('ip route add {network} via {gateway}'.format(network=network, gateway=gateway))
 
 
 def route_del(network, gateway):
-    return os_exec('route del -net {network} gw {gateway}'.format(network=network, gateway=gateway))
+    return os_exec('ip route del {network} via {gateway}'.format(network=network, gateway=gateway))
 
 
 if __name__ == '__main__':
