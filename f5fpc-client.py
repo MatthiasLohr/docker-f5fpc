@@ -34,7 +34,7 @@ def main():
     if args.debug:
         logger.setLevel(logging.DEBUG)
 
-    if os.getuid() <> 0 and args.networks and len(args.networks) > 0:
+    if os.getuid() != 0 and args.networks and len(args.networks) > 0:
         logging.warn('We need root privileges to set the network routes for you!')
 
     container_name = get_container_name(args.host)
