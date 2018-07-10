@@ -9,6 +9,7 @@ import shlex
 import signal
 import subprocess
 import sys
+from distutils.spawn import find_executable
 
 
 # initialize logging
@@ -126,7 +127,7 @@ def get_container_name(host):
 
 
 def container_exec(container, command):
-    command_string = '/usr/bin/docker exec -it {container} {command}'.format(container=container, command=command)
+    command_string = '{docker} exec -it {container} {command}'.format(docker=find_executable("docker"), container=container, command=command)
     command_splitted = shlex.split(command_string)
     logger.debug(command_splitted)
     process = subprocess.Popen(command_splitted, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
