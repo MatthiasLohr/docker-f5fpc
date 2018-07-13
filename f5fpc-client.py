@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import binascii
 import docker
 import getpass
 import logging
@@ -61,7 +62,7 @@ def main():
         environment={
             'HOST': args.host,
             'USER': args.user,
-            'HEXPASSWORD': password.encode('hex')
+            'HEXPASSWORD': binascii.hexlify(password.encode('utf8'))
         }
     )
     logging.debug('Docker container initialized')
