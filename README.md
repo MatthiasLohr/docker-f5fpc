@@ -11,6 +11,11 @@
   pip install -r requirements.txt
   ```
 
+### Mac
+
+* For automatic route setup on Mac you need to install ```iproute2mac``` via homebrew.
+
+
 ## Start F5 VPN client
 
 There's a wrapper script (```f5fpy-client.py```) which helps to set up
