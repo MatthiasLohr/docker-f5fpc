@@ -26,6 +26,11 @@ Simple run:
 ./f5fpc-client.py <VPN_HOST> <USER>
 ```
 
+Connect to a VPN network which uses the 10.0.0.0/8 IP range:
+```
+sudo ./f5fpc-client.py <VPN_HOST> <USER> -n 10.0.0.0/8
+```
+
 For more information and options see
 ```
 ./f5fpc-client.py -h
