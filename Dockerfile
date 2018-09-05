@@ -16,5 +16,8 @@ RUN mkdir -p /tmp/f5fpc && \
     rm -rf /tmp/f5fpc
 
 ADD ./files/opt/* /opt/
-
+ADD vpn.sh /vpn.sh
 CMD /opt/run.sh
+
+RUN apk update
+RUN apk add openssh
