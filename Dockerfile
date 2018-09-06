@@ -17,4 +17,3 @@ RUN mkdir -p /tmp/f5fpc && \
 
 ADD ./files/opt/* /opt/
 
-CMD /opt/run.sh
