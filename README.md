@@ -29,7 +29,8 @@ The docker image allows two operating modes:
 
 ### VPN client mode
 
-Start the Docker container with the following command:
+You don't need to clone this repository.
+Just start the Docker container with the following command:
 ```
 docker run --name f5fpc --net host -it --rm --privileged matthiaslohr/f5fpc /bin/bash
 ```
@@ -54,8 +55,9 @@ f5fpc -o
 
 There's a wrapper script (```f5fpy-client.py```) which helps to set up
 the docker container, the VPN connection and the desired network routes.
+Therefore for this mode you need to clone this repository and ```cd``` to it.
 
-Simple run:
+Simply run:
 ```
 ./f5fpc-client.py <VPN_HOST> <USER>
 ```
