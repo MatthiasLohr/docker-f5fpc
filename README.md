@@ -55,11 +55,9 @@ Run
 
 ### Gateway mode
 
-There's a wrapper script (```f5fpy-client.py```) which helps to set up
-the docker container, the VPN connection and the desired network routes.
-Therefore for this mode you need to clone this repository and ```cd``` to it.
+Clone this repository to your favourite place and ```cd``` into the directory.
 
-Simply run:
+Run
 ```
 ./f5fpc-vpn.sh gateway
 ```
