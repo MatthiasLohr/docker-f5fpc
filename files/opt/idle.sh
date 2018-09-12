@@ -3,5 +3,5 @@
 trap 'exit' SIGINT SIGTERM
 
 while true ; do
-	sleep 1
+	sleep 86400
 done

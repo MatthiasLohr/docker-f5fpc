@@ -2,23 +2,56 @@
 
 F5FPC=/usr/local/bin/f5fpc
 
-if [ -z "$HOST" ] ; then
+# read CLI parameters
+POSITIONAL=()
+while [ $# -gt 0 ] ; do
+        case $1 in
+                -t|--hostname)
+                        VPNHOST="$2"
+                        shift
+                        shift
+                        ;;
+		-u|--user)
+			USERNAME="$2"
+			shift
+			shift
+			;;
+		-p|--password)
+			PASSWORD="$2"
+			shift
+			shift
+			;;
+		-P|--hex-password)
+			HEXPASSWORD="$2"
+			shift
+			shift
+			;;
+                *)
+                        echo "Unknown parameter!"
+			exit 1
+                        ;;
+        esac
+done
+
+# check for all parameters
+if [ -z "$VPNHOST" ] ; then
 	echo -n "Please enter VPN host name (e.g. vpn.yourserver.com): "
-	read HOST
+	read VPNHOST
 fi
 
-if [ ! -e "$F5FPC" ] ; then
-	HOST=$HOST /opt/setup.sh
-	if [ "$?" != "0" ] ; then
-		exit 1
-	fi
+if [ -z "$USERNAME" ] ; then
+	echo -n "Please enter your VPN username: "
+	read USERNAME
 fi
 
-command="$F5FPC -s -x -t $HOST"
-
-if [ -n "$USER" ] ; then
-	command="$command -u $USER"
+if [ -z "$PASSWORD" -a -z "$HEXPASSWORD" ] ; then
+	echo -n "Please enter your VPN password: "
+	read -s PASSWORD
+	echo ""
 fi
+
+# build command
+command="$F5FPC -s -t $VPNHOST -u $USERNAME"
 
 if [ -n "$PASSWORD" ] ; then
 	command="$command -p $PASSWORD"
@@ -28,7 +61,7 @@ if [ -n "$HEXPASSWORD" ] ; then
 	command="$command -P $HEXPASSWORD"
 fi
 
-nohup $command
+nohup $command > /dev/null
 
-sysctl -w net.ipv4.ip_forward=1 > /dev/null
 iptables -t nat -A POSTROUTING -o tun0 -j MASQUERADE
+

@@ -14,10 +14,7 @@ The docker image allows two operating modes:
 * Install Docker. **Important:** Do **not** use the packages provided by your
   distribution packages sources.
   Use the officical resources from docker: https://docs.docker.com/engine/installation/.
-* If you want to use the gateway mode: Install required python packages:
-  ```
-  pip install -r requirements.txt
-  ```
+
 
 ### Mac
 
@@ -27,20 +24,15 @@ The docker image allows two operating modes:
 
 ## Start F5 VPN client
 
-### VPN client mode
+### VPN client mode (quick)
 
 You don't need to clone this repository.
 Just start the Docker container with the following command:
 ```
-docker run --name f5fpc --net host -it --rm --privileged matthiaslohr/f5fpc /bin/bash
+docker run --name f5fpc-vpn --net host -it --rm --privileged matthiaslohr/f5fpc /opt/connect.sh
 ```
 
-Start the VPN client and connect to your VPN server with
-```
-f5fpc -s
-```
-
-Status check:
+You can check status with:
 ```
 f5fpc -i
 ```
@@ -48,6 +40,16 @@ f5fpc -i
 Disconnect:
 ```
 f5fpc -o
+```
+
+
+### VPN client mode (helper script)
+
+Clone this repository to your favourite place and ```cd``` into the directory.
+
+Run
+```
+./f5fpc-vpn.sh client
 ```
 
 
@@ -59,16 +61,16 @@ Therefore for this mode you need to clone this repository and ```cd``` to it.
 
 Simply run:
 ```
-./f5fpc-client.py <VPN_HOST> <USER>
+./f5fpc-vpn.sh gateway
 ```
 
 Auto route setup for connecting to a VPN network which uses the 10.0.0.0/8 IP range (needs root add/remove routes):
 ```
-sudo ./f5fpc-client.py <VPN_HOST> <USER> -n 10.0.0.0/8
+sudo ./f5fpc-vpn.sh -n 10.0.0.0/8
 ```
 
 For more information and options see
 ```
-./f5fpc-client.py -h
+./f5fpc-vpn.sh -h
 ```
 
