@@ -86,11 +86,19 @@ start_gateway() {
 		exit 1
 	fi
 	docker exec -it "$CONTAINER_NAME" /opt/connect.sh
+	dockerip=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER_NAME`
+	for network in ${NETWORKS[@]} ; do
+		ip route add $network via $dockerip
+	done
 	observe_f5fpc
 }
 
 stop_vpn() {
 	echo "Shutting down..."
+	dockerip=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER_NAME`
+        for network in ${NETWORKS[@]} ; do
+                ip route del $network via $dockerip
+        done
 	docker exec "$CONTAINER_NAME" /usr/local/bin/f5fpc -o > /dev/null
 	docker stop "$CONTAINER_NAME"
 	exit
@@ -98,11 +106,17 @@ stop_vpn() {
 
 # read CLI parameters
 POSITIONAL=()
+NETWORKS=()
 while [ $# -gt 0 ] ; do
 	case $1 in
 		-h|--help)
 			show_help
 			exit
+			shift
+			;;
+		-n|--network)
+			NETWORKS+=("$2")
+			shift
 			shift
 			;;
 		*)
