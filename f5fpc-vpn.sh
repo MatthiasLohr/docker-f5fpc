@@ -45,6 +45,13 @@ observe_f5fpc() {
 					echo "Connection established successfully"
 				fi
 				;;
+			7)
+				echo "Logon denied. Insufficient privileges/wrong logon credentials?"
+				echo -n "Exiting..."
+				docker stop "$CONTAINER_NAME"
+				echo ""
+				exit
+				;;
 			85) # client not connected
 				exit
 				;;
