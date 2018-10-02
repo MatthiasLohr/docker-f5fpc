@@ -46,8 +46,8 @@ observe_f5fpc() {
 				fi
 				;;
 			7)
-				echo "Logon denied. Insufficient privileges/wrong logon credentials?"
-				echo -n "Exiting..."
+				echo "Logon denied"
+				echo "$output"
 				docker stop "$CONTAINER_NAME"
 				echo ""
 				exit
