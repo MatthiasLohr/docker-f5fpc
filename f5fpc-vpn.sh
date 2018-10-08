@@ -4,6 +4,14 @@ CONTAINER_NAME="f5fpc-vpn"
 F5FPC_ARGS=""
 keep_running=1
 
+for cmd in docker ip ; do
+	which "$cmd" > /dev/null 2> /dev/null
+	if [ "$?" != "0" ] ; then
+		echo "Unsatisfied dependencies: $cmd command not found!"
+		exit 1
+	fi
+done
+
 show_help() {
 	cat << EOF
 Usage: $0 <MODE> [<PARAMETERS...>]
