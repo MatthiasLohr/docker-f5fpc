@@ -2,6 +2,8 @@
 
 CONTAINER_NAME="f5fpc-vpn"
 F5FPC_ARGS=""
+VPNHOST=""
+USERNAME=""
 keep_running=1
 
 for cmd in docker ip ; do
@@ -22,6 +24,8 @@ Supported modes:
 
 Supported parameters:
   -h --help	Show this help text
+  -t --host     VPN host
+  -u --user     VPN username
 EOF
 }
 
@@ -80,6 +84,8 @@ start_client() {
 	docker run -d --rm --privileged \
 		--name "$CONTAINER_NAME" \
 		--net host \
+		-e VPNHOST="$VPNHOST" \
+		-e USERNAME="$USERNAME" \
 		matthiaslohr/f5fpc \
 		/opt/idle.sh > /dev/null
 	if [ "$?" != 0 ] ; then
@@ -94,6 +100,8 @@ start_gateway() {
 	docker run -d --rm --privileged \
 		--name "$CONTAINER_NAME" \
 		--sysctl net.ipv4.ip_forward=1 \
+		-e VPNHOST="$VPNHOST" \
+		-e USERNAME="$USERNAME" \
 		matthiaslohr/f5fpc \
 		/opt/idle.sh > /dev/null
 	if [ "$?" != 0 ] ; then
@@ -127,6 +135,16 @@ while [ $# -gt 0 ] ; do
 		-h|--help)
 			show_help
 			exit
+			shift
+			;;
+		-t|--host)
+			VPNHOST="$2"
+			shift
+			shift
+			;;
+		-u|--user)
+			USERNAME="$2"
+			shift
 			shift
 			;;
 		-n|--network)
