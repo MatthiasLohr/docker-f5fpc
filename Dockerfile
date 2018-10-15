@@ -1,7 +1,8 @@
 
 FROM alpine:3.8
 
-LABEL maintainer="Matthias Lohr <matthias@lohr.me>"
+LABEL maintainer="Matthias Lohr <mail@mlohr.com>"
+LABEL architecture="amd64"
 
 RUN apk add --no-cache bash ca-certificates file iptables libc6-compat libgcc libstdc++ wget && \
 	update-ca-certificates
