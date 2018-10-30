@@ -60,6 +60,7 @@ observe_f5fpc() {
 			7)
 				echo "Logon denied"
 				echo "$output"
+				echo "Shutting down..."
 				docker stop "$CONTAINER_NAME"
 				echo ""
 				exit
