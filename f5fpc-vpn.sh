@@ -65,6 +65,13 @@ observe_f5fpc() {
 				echo ""
 				exit
 				;;
+			9)
+				echo "Connection timed out"
+				echo "Shutting down..."
+				docker stop "$CONTAINER_NAME"
+				echo ""
+				exit
+				;;
 			85) # client not connected
 				exit
 				;;
