@@ -64,7 +64,7 @@ Run
 
 Auto route setup for connecting to a VPN network which uses the 10.0.0.0/8 IP range (needs root add/remove routes):
 ```
-sudo ./f5fpc-vpn.sh -n 10.0.0.0/8
+sudo ./f5fpc-vpn.sh gateway -n 10.0.0.0/8
 ```
 
 For more information and options see
