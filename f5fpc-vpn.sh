@@ -51,6 +51,11 @@ observe_f5fpc() {
           echo "Waiting..."
         fi
         ;;
+      4)
+        if [ "$last_result" != "4" ] ; then
+          echo "Retrieving favorites list..."
+        fi
+        ;;
       5)
         if [ "$last_result" != "5" ] ; then
           echo "Connection established successfully"
